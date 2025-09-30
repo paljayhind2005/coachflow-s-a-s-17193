@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Users, 
@@ -9,15 +10,63 @@ import {
   Bell,
   Search,
   Menu,
-  X
+  X,
+  LogOut
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Dashboard from "@/components/dashboard/Dashboard";
+import StudentsManagement from "@/components/admin/StudentsManagement";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate("/login");
+        return;
+      }
+
+      setUserEmail(session.user.email || "");
+    };
+
+    checkAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        navigate("/login");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: "Logged Out",
+        description: "You have been successfully logged out",
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to log out",
+        variant: "destructive",
+      });
+    }
+  };
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -32,12 +81,7 @@ const Admin = () => {
       case "dashboard":
         return <Dashboard />;
       case "students":
-        return (
-          <div className="p-8">
-            <h2 className="text-2xl font-bold mb-4">Student Management</h2>
-            <p className="text-muted-foreground">Student management features coming soon...</p>
-          </div>
-        );
+        return <StudentsManagement />;
       case "batches":
         return (
           <div className="p-8">
@@ -80,7 +124,7 @@ const Admin = () => {
             <div className="bg-gradient-primary p-2 rounded-xl">
               <BookOpen className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold text-foreground">EduManage</span>
+            <span className="text-xl font-bold text-foreground">OkFees</span>
           </div>
           <Button
             variant="ghost"
@@ -112,6 +156,16 @@ const Admin = () => {
               <span className="font-medium">{item.label}</span>
             </motion.button>
           ))}
+          
+          <motion.button
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted mt-4 border-t border-border pt-6"
+            onClick={handleLogout}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="font-medium">Logout</span>
+          </motion.button>
         </nav>
       </motion.div>
 
@@ -162,11 +216,13 @@ const Admin = () => {
               
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">AD</span>
+                  <span className="text-sm font-medium text-white">
+                    {userEmail.charAt(0).toUpperCase()}
+                  </span>
                 </div>
                 <div className="hidden sm:block">
                   <p className="text-sm font-medium text-foreground">Admin</p>
-                  <p className="text-xs text-muted-foreground">admin@institute.com</p>
+                  <p className="text-xs text-muted-foreground">{userEmail}</p>
                 </div>
               </div>
             </div>
