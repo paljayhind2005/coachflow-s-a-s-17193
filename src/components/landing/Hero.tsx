@@ -1,15 +1,32 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play, Users, GraduationCap, TrendingUp } from "lucide-react";
+import heroBg from "@/assets/hero-bg.jpg";
+import slide1 from "@/assets/slide1.jpg";
+import slide2 from "@/assets/slide2.jpg";
+import slide3 from "@/assets/slide3.jpg";
+import slide4 from "@/assets/slide4.jpg";
+import slide5 from "@/assets/slide5.jpg";
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const slides = [slide1, slide2, slide3, slide4, slide5];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   useEffect(() => {
     const tl = gsap.timeline();
@@ -43,11 +60,15 @@ const Hero = () => {
   return (
     <section 
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden pt-16"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
     >
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-grid-white/10 bg-[size:60px_60px] [mask-image:radial-gradient(900px_400px_at_50%_300px,white,transparent)]" />
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20" />
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-accent/90" />
+      </div>
       
       <div className="container relative z-10 px-4 mx-auto text-center">
         <motion.div
@@ -117,6 +138,43 @@ const Hero = () => {
                 <div className="text-white/80">{stat.label}</div>
               </motion.div>
             ))}
+          </motion.div>
+
+          {/* Image Slider */}
+          <motion.div 
+            className="mt-16 relative w-full max-w-4xl mx-auto h-64 md:h-96 rounded-2xl overflow-hidden shadow-2xl"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            {slides.map((slide, index) => (
+              <motion.div
+                key={index}
+                className="absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: currentSlide === index ? 1 : 0 }}
+                transition={{ duration: 1 }}
+              >
+                <img 
+                  src={slide} 
+                  alt={`Slide ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            ))}
+            
+            {/* Slider indicators */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentSlide === index ? 'bg-white w-8' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
           </motion.div>
         </motion.div>
       </div>

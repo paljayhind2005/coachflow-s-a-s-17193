@@ -32,7 +32,7 @@ const Navbar = () => {
               <GraduationCap className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-foreground">
-              EduManage
+              OkFees
             </span>
           </motion.div>
 
