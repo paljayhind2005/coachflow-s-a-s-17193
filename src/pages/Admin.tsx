@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Dashboard from "@/components/dashboard/Dashboard";
 import StudentsManagement from "@/components/admin/StudentsManagement";
+import FeeManagement from "@/components/admin/FeeManagement";
+import WhatsAppSettings from "@/components/admin/WhatsAppSettings";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -90,19 +92,9 @@ const Admin = () => {
           </div>
         );
       case "fees":
-        return (
-          <div className="p-8">
-            <h2 className="text-2xl font-bold mb-4">Fee Management</h2>
-            <p className="text-muted-foreground">Fee management features coming soon...</p>
-          </div>
-        );
+        return <FeeManagement />;
       case "settings":
-        return (
-          <div className="p-8">
-            <h2 className="text-2xl font-bold mb-4">Settings</h2>
-            <p className="text-muted-foreground">Settings panel coming soon...</p>
-          </div>
-        );
+        return <WhatsAppSettings />;
       default:
         return <Dashboard />;
     }

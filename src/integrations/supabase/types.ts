@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      fee_payments: {
+        Row: {
+          amount_paid: number
+          created_at: string
+          id: string
+          month: number
+          notes: string | null
+          payment_date: string
+          payment_method: string | null
+          student_id: string
+          updated_at: string
+          user_id: string
+          year: number
+        }
+        Insert: {
+          amount_paid?: number
+          created_at?: string
+          id?: string
+          month: number
+          notes?: string | null
+          payment_date?: string
+          payment_method?: string | null
+          student_id: string
+          updated_at?: string
+          user_id: string
+          year: number
+        }
+        Update: {
+          amount_paid?: number
+          created_at?: string
+          id?: string
+          month?: number
+          notes?: string | null
+          payment_date?: string
+          payment_method?: string | null
+          student_id?: string
+          updated_at?: string
+          user_id?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fee_payments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -23,6 +73,8 @@ export type Database = {
           institute_name: string | null
           phone: string | null
           updated_at: string
+          whatsapp_group_link: string | null
+          whatsapp_number: string | null
         }
         Insert: {
           created_at?: string
@@ -32,6 +84,8 @@ export type Database = {
           institute_name?: string | null
           phone?: string | null
           updated_at?: string
+          whatsapp_group_link?: string | null
+          whatsapp_number?: string | null
         }
         Update: {
           created_at?: string
@@ -41,6 +95,8 @@ export type Database = {
           institute_name?: string | null
           phone?: string | null
           updated_at?: string
+          whatsapp_group_link?: string | null
+          whatsapp_number?: string | null
         }
         Relationships: []
       }

@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import StudentSearch from "./StudentSearch";
+import { MessageCircle } from "lucide-react";
 
 interface Student {
   id: string;
@@ -202,6 +203,43 @@ const StudentsManagement = () => {
     setCurrentStudent(null);
   };
 
+  const handleSendWhatsApp = async (student: Student) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('whatsapp_number')
+        .eq('id', user.id)
+        .single();
+
+      if (!profile?.whatsapp_number) {
+        toast({
+          title: "WhatsApp Not Configured",
+          description: "Please configure your WhatsApp number in Settings",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const message = `Hello! Your unique student ID is: ${student.student_id}\n\nStudent Name: ${student.name}\n\nPlease keep this ID safe for future reference.`;
+      const whatsappUrl = `https://wa.me/${profile.whatsapp_number.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+
+      toast({
+        title: "WhatsApp Opened",
+        description: "Student ID message ready to send",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to open WhatsApp",
+        variant: "destructive",
+      });
+    }
+  };
+
   const filteredStudents = students.filter(student =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -346,6 +384,14 @@ const StudentsManagement = () => {
                         </div>
                       </div>
                       <div className="flex gap-2">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          onClick={() => handleSendWhatsApp(student)}
+                          title="Send ID via WhatsApp"
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                        </Button>
                         <Button
                           size="icon"
                           variant="outline"
