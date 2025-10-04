@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Plus, Minus } from "lucide-react";
 
 const FAQ = () => {
@@ -129,13 +130,15 @@ const FAQ = () => {
               Our support team is here to help you get started. Contact us for personalized assistance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                className="bg-primary text-primary-foreground px-4 sm:px-6 py-3 rounded-xl font-semibold shadow-soft hover:shadow-medium transition-all duration-300 text-sm sm:text-base"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Contact Support
-              </motion.button>
+              <Link to="/contact">
+                <motion.button
+                  className="bg-primary text-primary-foreground px-4 sm:px-6 py-3 rounded-xl font-semibold shadow-soft hover:shadow-medium transition-all duration-300 text-sm sm:text-base"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Contact Support
+                </motion.button>
+              </Link>
               <motion.button
                 className="border border-border text-foreground px-4 sm:px-6 py-3 rounded-xl font-semibold hover:bg-muted transition-all duration-300 text-sm sm:text-base"
                 whileHover={{ scale: 1.05 }}
