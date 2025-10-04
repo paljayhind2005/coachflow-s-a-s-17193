@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          batch: string | null
+          content: string
+          created_at: string
+          id: string
+          media_type: string | null
+          media_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          batch?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          batch?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       fee_payments: {
         Row: {
           amount_paid: number

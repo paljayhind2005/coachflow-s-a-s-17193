@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { 
   Users, 
   IndianRupee, 
@@ -6,14 +7,49 @@ import {
   TrendingUp,
   Calendar,
   BookOpen,
-  CreditCard
+  CreditCard,
+  Megaphone
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
+
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  media_url: string | null;
+  media_type: string | null;
+  batch: string | null;
+  created_at: string;
+}
 
 const Dashboard = () => {
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data } = await supabase
+      .from("announcements")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(3);
+
+    if (data) {
+      setAnnouncements(data);
+    }
+  };
+
   // Mock data - In real app, this would come from API
   const stats = [
     {
@@ -200,11 +236,75 @@ const Dashboard = () => {
         </motion.div>
       </div>
 
+      {/* Announcements */}
+      {announcements.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <Card className="bg-gradient-card border-border/50 shadow-soft">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <Megaphone className="h-5 w-5 text-primary" />
+                Latest Announcements
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {announcements.map((announcement, index) => (
+                  <motion.div
+                    key={announcement.id}
+                    className="p-4 bg-background/50 rounded-xl border border-border/30"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold text-foreground">{announcement.title}</h4>
+                      <span className="text-xs text-muted-foreground">
+                        {format(new Date(announcement.created_at), "MMM dd")}
+                      </span>
+                    </div>
+                    {announcement.batch && (
+                      <Badge variant="secondary" className="mb-2 text-xs">
+                        {announcement.batch}
+                      </Badge>
+                    )}
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {announcement.content}
+                    </p>
+                    {announcement.media_url && announcement.media_type === "image" && (
+                      <div className="mt-3">
+                        <img
+                          src={announcement.media_url}
+                          alt={announcement.title}
+                          className="rounded-lg max-w-full h-auto max-h-48 object-cover"
+                        />
+                      </div>
+                    )}
+                    {announcement.media_url && announcement.media_type === "video" && (
+                      <div className="mt-3">
+                        <video
+                          controls
+                          className="rounded-lg max-w-full h-auto max-h-48"
+                          src={announcement.media_url}
+                        />
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       {/* Upcoming Dues */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
       >
         <Card className="bg-gradient-card border-border/50 shadow-soft">
           <CardHeader className="flex flex-row items-center justify-between">

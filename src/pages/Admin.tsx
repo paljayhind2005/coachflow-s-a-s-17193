@@ -11,7 +11,8 @@ import {
   Search,
   Menu,
   X,
-  LogOut
+  LogOut,
+  Megaphone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,7 @@ import Dashboard from "@/components/dashboard/Dashboard";
 import StudentsManagement from "@/components/admin/StudentsManagement";
 import FeeManagement from "@/components/admin/FeeManagement";
 import WhatsAppSettings from "@/components/admin/WhatsAppSettings";
+import AnnouncementsManagement from "@/components/admin/AnnouncementsManagement";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -73,6 +75,7 @@ const Admin = () => {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "students", label: "Students", icon: Users },
+    { id: "announcements", label: "Announcements", icon: Megaphone },
     { id: "batches", label: "Batches", icon: BookOpen },
     { id: "fees", label: "Fee Management", icon: CreditCard },
     { id: "settings", label: "Settings", icon: Settings },
@@ -84,6 +87,8 @@ const Admin = () => {
         return <Dashboard />;
       case "students":
         return <StudentsManagement />;
+      case "announcements":
+        return <AnnouncementsManagement />;
       case "batches":
         return (
           <div className="p-8">
