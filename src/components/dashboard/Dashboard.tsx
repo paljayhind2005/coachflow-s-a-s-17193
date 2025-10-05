@@ -8,7 +8,8 @@ import {
   Calendar,
   BookOpen,
   CreditCard,
-  Megaphone
+  Megaphone,
+  X
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +30,7 @@ interface Announcement {
 
 const Dashboard = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [showAnnouncementBar, setShowAnnouncementBar] = useState(true);
 
   useEffect(() => {
     fetchAnnouncements();
@@ -109,8 +111,49 @@ const Dashboard = () => {
     { name: "Sneha Gupta", batch: "Biology NEET", amount: 3200, dueDate: "2024-01-20", urgent: false },
   ];
 
+  const latestAnnouncement = announcements[0];
+
   return (
     <div className="space-y-8">
+      {/* Announcement Bar */}
+      {latestAnnouncement && showAnnouncementBar && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-gradient-primary rounded-xl shadow-elegant overflow-hidden"
+        >
+          <div className="flex items-center justify-between p-4 gap-4">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="bg-white/20 p-2.5 rounded-lg flex-shrink-0">
+                <Megaphone className="h-5 w-5 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-white font-semibold text-sm sm:text-base truncate">
+                  {latestAnnouncement.title}
+                </h3>
+                <p className="text-white/90 text-xs sm:text-sm line-clamp-1">
+                  {latestAnnouncement.content}
+                </p>
+                {latestAnnouncement.batch && (
+                  <span className="inline-block mt-1.5 text-xs bg-white/20 text-white px-2 py-0.5 rounded">
+                    Batch: {latestAnnouncement.batch}
+                  </span>
+                )}
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/20 flex-shrink-0"
+              onClick={() => setShowAnnouncementBar(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </motion.div>
+      )}
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
