@@ -7,7 +7,6 @@ import {
   BookOpen, 
   CreditCard, 
   Settings,
-  Bell,
   Search,
   Menu,
   X,
@@ -21,6 +20,7 @@ import StudentsManagement from "@/components/admin/StudentsManagement";
 import FeeManagement from "@/components/admin/FeeManagement";
 import WhatsAppSettings from "@/components/admin/WhatsAppSettings";
 import AnnouncementsManagement from "@/components/admin/AnnouncementsManagement";
+import NotificationDropdown from "@/components/admin/NotificationDropdown";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -204,12 +204,7 @@ const Admin = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" className="relative">
-                <Bell className="h-5 w-5" />
-                <div className="absolute -top-1 -right-1 h-4 w-4 bg-destructive rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">3</span>
-                </div>
-              </Button>
+              <NotificationDropdown />
               
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
