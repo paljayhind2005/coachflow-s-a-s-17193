@@ -40,10 +40,10 @@ const Dashboard = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
+    // Fetch all public announcements for display
     const { data } = await supabase
       .from("announcements")
       .select("*")
-      .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(3);
 
@@ -123,8 +123,8 @@ const Dashboard = () => {
           transition={{ duration: 0.5 }}
           className="bg-gradient-primary rounded-xl shadow-elegant overflow-hidden"
         >
-          <div className="flex items-center justify-between p-4 gap-4">
-            <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-4">
+            <div className="flex items-start gap-3 flex-1 min-w-0 w-full">
               <div className="bg-white/20 p-2.5 rounded-lg flex-shrink-0">
                 <Megaphone className="h-5 w-5 text-white" />
               </div>
@@ -132,20 +132,29 @@ const Dashboard = () => {
                 <h3 className="text-white font-semibold text-sm sm:text-base truncate">
                   {latestAnnouncement.title}
                 </h3>
-                <p className="text-white/90 text-xs sm:text-sm line-clamp-1">
+                <p className="text-white/90 text-xs sm:text-sm line-clamp-2 mt-1">
                   {latestAnnouncement.content}
                 </p>
                 {latestAnnouncement.batch && (
-                  <span className="inline-block mt-1.5 text-xs bg-white/20 text-white px-2 py-0.5 rounded">
+                  <span className="inline-block mt-2 text-xs bg-white/20 text-white px-2 py-0.5 rounded">
                     Batch: {latestAnnouncement.batch}
                   </span>
+                )}
+                {latestAnnouncement.media_url && latestAnnouncement.media_type === "image" && (
+                  <div className="mt-3">
+                    <img
+                      src={latestAnnouncement.media_url}
+                      alt={latestAnnouncement.title}
+                      className="rounded-lg max-w-full h-auto max-h-32 object-cover"
+                    />
+                  </div>
                 )}
               </div>
             </div>
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/20 flex-shrink-0"
+              className="text-white hover:bg-white/20 flex-shrink-0 self-start sm:self-center"
               onClick={() => setShowAnnouncementBar(false)}
             >
               <X className="h-4 w-4" />
