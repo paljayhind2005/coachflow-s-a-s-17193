@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Search, MessageCircle } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Search, MessageCircle, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,22 @@ const PublicStudentSearch = () => {
   const [searchResult, setSearchResult] = useState<StudentResult | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const resultCardRef = useRef<HTMLDivElement>(null);
+
+  // Click outside to dismiss result
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (resultCardRef.current && !resultCardRef.current.contains(event.target as Node)) {
+        setSearchResult(null);
+        setSearchQuery("");
+      }
+    };
+
+    if (searchResult) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [searchResult]);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
@@ -121,14 +137,27 @@ const PublicStudentSearch = () => {
           </div>
 
           {searchResult && (
-            <Card className="overflow-hidden">
+            <Card ref={resultCardRef} className="overflow-hidden">
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between border-b pb-4">
-                    <h3 className="text-2xl font-bold">{searchResult.name}</h3>
-                    <span className="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full font-mono">
-                      {searchResult.student_id}
-                    </span>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold">{searchResult.name}</h3>
+                      <span className="text-sm bg-primary/10 text-primary px-3 py-1 rounded-full font-mono inline-block mt-2">
+                        {searchResult.student_id}
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        setSearchResult(null);
+                        setSearchQuery("");
+                      }}
+                      className="flex-shrink-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">

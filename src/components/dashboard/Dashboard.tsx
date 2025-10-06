@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   Users, 
   IndianRupee, 
@@ -31,10 +31,33 @@ interface Announcement {
 const Dashboard = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [showAnnouncementBar, setShowAnnouncementBar] = useState(true);
+  const announcementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchAnnouncements();
   }, []);
+
+  // Click outside to dismiss announcement bar
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        showAnnouncementBar &&
+        announcementRef.current &&
+        !announcementRef.current.contains(event.target as Node)
+      ) {
+        setShowAnnouncementBar(false);
+      }
+    };
+
+    if (showAnnouncementBar && announcements.length > 0) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener("touchstart", handleClickOutside);
+      };
+    }
+  }, [showAnnouncementBar, announcements]);
 
   const fetchAnnouncements = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -118,6 +141,7 @@ const Dashboard = () => {
       {/* Announcement Bar */}
       {latestAnnouncement && showAnnouncementBar && (
         <motion.div
+          ref={announcementRef}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -154,8 +178,15 @@ const Dashboard = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/20 flex-shrink-0 self-start sm:self-center"
-              onClick={() => setShowAnnouncementBar(false)}
+              className="text-white hover:bg-white/20 flex-shrink-0 self-start sm:self-center touch-manipulation"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowAnnouncementBar(false);
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                setShowAnnouncementBar(false);
+              }}
             >
               <X className="h-4 w-4" />
             </Button>
