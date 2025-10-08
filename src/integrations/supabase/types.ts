@@ -50,6 +50,36 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          image_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       fee_payments: {
         Row: {
           amount_paid: number
@@ -100,6 +130,87 @@ export type Database = {
           },
         ]
       }
+      institute_info: {
+        Row: {
+          created_at: string
+          description: string | null
+          hero_image_url: string | null
+          id: string
+          location: string | null
+          map_link: string | null
+          name: string
+          teacher_names: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          hero_image_url?: string | null
+          id?: string
+          location?: string | null
+          map_link?: string | null
+          name: string
+          teacher_names?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          hero_image_url?: string | null
+          id?: string
+          location?: string | null
+          map_link?: string | null
+          name?: string
+          teacher_names?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      live_classes: {
+        Row: {
+          class_name: string
+          created_at: string
+          fee: number
+          id: string
+          start_date: string
+          subject: string
+          teacher_image_url: string | null
+          teacher_name: string
+          timing: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class_name: string
+          created_at?: string
+          fee: number
+          id?: string
+          start_date: string
+          subject: string
+          teacher_image_url?: string | null
+          teacher_name: string
+          timing: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class_name?: string
+          created_at?: string
+          fee?: number
+          id?: string
+          start_date?: string
+          subject?: string
+          teacher_image_url?: string | null
+          teacher_name?: string
+          timing?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -133,6 +244,30 @@ export type Database = {
           updated_at?: string
           whatsapp_group_link?: string | null
           whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
+      student_summary: {
+        Row: {
+          created_at: string
+          id: string
+          summary: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          summary: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          summary?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -191,6 +326,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      topper_students: {
+        Row: {
+          class: string
+          created_at: string
+          id: string
+          image_url: string | null
+          marks: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          marks: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          marks?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      upcoming_classes: {
+        Row: {
+          class_name: string
+          created_at: string
+          fee: number
+          id: string
+          start_date: string
+          subject: string
+          teacher_image_url: string | null
+          teacher_name: string
+          timing: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class_name: string
+          created_at?: string
+          fee: number
+          id?: string
+          start_date: string
+          subject: string
+          teacher_image_url?: string | null
+          teacher_name: string
+          timing: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class_name?: string
+          created_at?: string
+          fee?: number
+          id?: string
+          start_date?: string
+          subject?: string
+          teacher_image_url?: string | null
+          teacher_name?: string
+          timing?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {

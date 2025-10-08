@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Dashboard from "@/components/dashboard/Dashboard";
+import BlogDashboard from "@/components/dashboard/BlogDashboard";
 import StudentsManagement from "@/components/admin/StudentsManagement";
 import FeeManagement from "@/components/admin/FeeManagement";
 import WhatsAppSettings from "@/components/admin/WhatsAppSettings";
@@ -84,7 +84,7 @@ const Admin = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return <Dashboard />;
+        return <BlogDashboard />;
       case "students":
         return <StudentsManagement />;
       case "announcements":
@@ -101,7 +101,7 @@ const Admin = () => {
       case "settings":
         return <WhatsAppSettings />;
       default:
-        return <Dashboard />;
+        return <BlogDashboard />;
     }
   };
 
