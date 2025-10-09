@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, GraduationCap } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import okfeesLogo from "@/assets/okfees-logo.jpg";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,9 +29,11 @@ const Navbar = () => {
             className="flex items-center gap-2"
             whileHover={{ scale: 1.05 }}
           >
-            <div className="bg-gradient-primary p-2 rounded-xl">
-              <GraduationCap className="h-6 w-6 text-white" />
-            </div>
+            <img 
+              src={okfeesLogo} 
+              alt="OkFees Logo" 
+              className="h-10 w-10 rounded-xl object-cover"
+            />
             <span className="text-xl font-bold text-foreground">
               OkFees
             </span>
