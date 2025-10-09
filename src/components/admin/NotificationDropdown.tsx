@@ -92,6 +92,13 @@ export default function NotificationDropdown() {
                           className="mt-2 rounded max-h-32 w-full object-cover"
                         />
                       )}
+                      {announcement.media_url && announcement.media_type === "video" && (
+                        <video
+                          src={announcement.media_url}
+                          controls
+                          className="mt-2 rounded max-h-32 w-full"
+                        />
+                      )}
                       <p className="text-xs text-muted-foreground mt-2">
                         {format(new Date(announcement.created_at), "PPp")}
                       </p>

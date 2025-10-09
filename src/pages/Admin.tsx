@@ -11,8 +11,10 @@ import {
   Menu,
   X,
   LogOut,
-  Megaphone
+  Megaphone,
+  ArrowLeft
 } from "lucide-react";
+import okfeesLogo from "@/assets/okfees-logo.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BlogDashboard from "@/components/dashboard/BlogDashboard";
@@ -118,9 +120,11 @@ const Admin = () => {
       >
         <div className="flex items-center justify-between p-6 border-b border-border">
           <div className="flex items-center gap-2">
-            <div className="bg-gradient-primary p-2 rounded-xl">
-              <BookOpen className="h-6 w-6 text-white" />
-            </div>
+            <img 
+              src={okfeesLogo} 
+              alt="OkFees Logo" 
+              className="h-10 w-10 rounded-xl object-cover"
+            />
             <span className="text-xl font-bold text-foreground">OkFees</span>
           </div>
           <Button
@@ -193,6 +197,18 @@ const Admin = () => {
               >
                 <Menu className="h-5 w-5" />
               </Button>
+              
+              {activeTab === "dashboard" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate("/")}
+                  className="gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  <span className="hidden sm:inline">Home</span>
+                </Button>
+              )}
               
               <div className="relative max-w-48 lg:max-w-64">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />

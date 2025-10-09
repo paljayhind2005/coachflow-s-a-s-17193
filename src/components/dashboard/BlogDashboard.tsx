@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import InstituteHeader from "./blog-sections/InstituteHeader";
+import PendingPaymentsSection from "./blog-sections/PendingPaymentsSection";
 import UpcomingClassesSection from "./blog-sections/UpcomingClassesSection";
 import LiveClassesSection from "./blog-sections/LiveClassesSection";
 import TopperStudentsSection from "./blog-sections/TopperStudentsSection";
@@ -89,6 +90,9 @@ const BlogDashboard = () => {
         instituteInfo={instituteInfo} 
         onUpdate={fetchInstituteInfo}
       />
+
+      {/* Pending Payments Section */}
+      <PendingPaymentsSection />
 
       {/* Upcoming Classes Section */}
       <UpcomingClassesSection />
